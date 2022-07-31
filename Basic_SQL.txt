@@ -1,0 +1,232 @@
+---MySQL Command Shell Tutorial---
+
+
+1.Open mysql Shell --> 
+    mysql -u root -p [password: root]
+
+2. Create User First time --> 
+    1. CREATE USER 'username' IDENTIFIED BY 'password';
+    2. GRANT SELECT ON *.* TO 'username';
+    3. GRANT ALL PRIVILEGES ON *.* TO 'username';
+
+    Drop or Delete User -->
+    1. DROP USER 'username';
+
+3. Create Database And Use it -->
+    1. CREATE DATABASE dbname;
+    2. USE dbname;
+
+    Drop or Delete Database -->
+    1. DROP DATABASE dbname; 
+
+    Show Database -->
+    1. show databases;
+
+4. Create Table -->
+    1. Syntax:
+        CREATE TABLE table_name (
+            column1 datatype,
+            column2 datatype,
+            column3 datatype,
+            ....
+        );
+
+        Example:
+        CREATE TABLE Persons (
+            PersonID int,
+            LastName varchar(255),
+            FirstName varchar(255),
+            Address varchar(255),
+            City varchar(255)
+        );
+
+        Drop or Delete Table -->
+        1. DROP TABLE table_name;
+
+        Show Table -->
+        1. show tables;
+
+5. Insert Data into Table -->
+    1.INSERT INTO table_name (column1, column2, column3, ...)
+    VALUES (value1, value2, value3, ...);
+
+6. Extra Column ADD or Alter Table - ADD column
+    1.ALTER TABLE table_name
+    ADD column_name datatype;
+
+    Drop Column -->
+    1.  ALTER TABLE table_name
+    DROP COLUMN column_name;
+
+    Modify Column Datatype -->
+    1. ALTER TABLE table_name
+    MODIFY COLUMN column_name datatype;
+
+7. Delete row of table -->
+    1.DELETE FROM table_name WHERE condition;
+
+8. Update row of table -->
+    1. UPDATE table_name
+    SET column1 = value1, column2 = value2, ...
+    WHERE condition;
+
+    Example:
+    1. UPDATE Customers
+    SET ContactName = 'Alfred Schmidt', City = 'Frankfurt'
+    WHERE CustomerID = 1;
+    
+    . UPDATE Persons
+    SET PersonID = 8
+    WHERE PersonID = 1; [1 is empty row, where 2 is First of the row]
+
+
+9. where Clause -->
+    1. SELECT * FROM Customers
+    WHERE Country = 'Mexico';
+
+10. And, Or, Not Condition -->
+    1. SELECT column1, column2, ...
+    FROM table_name
+    
+    WHERE condition1 AND condition2 AND condition3 ...;
+
+    WHERE condition1 OR condition2 OR condition3 ...;
+
+    WHERE NOT condition;
+
+    Example:
+    SELECT * FROM Customers
+    WHERE Country = 'Germany' AND City = 'Berlin';
+
+11. Sort By or Order By -->
+    1. SELECT column1, column2, ...
+    FROM table_name
+    ORDER BY column1, column2, ... ASC|DESC;
+
+    DESC -->
+    1. Descent Column
+
+12. Null Values -->
+    1. Null Syntax:
+    SELECT column_names
+    FROM table_name
+    WHERE column_name IS NULL;
+    
+    2. Not Null Syntax -->
+    SELECT column_names
+    FROM table_name
+    WHERE column_name IS NOT NULL; 
+
+13. Limit Columns -->
+    1.SELECT * FROM Customers
+    LIMIT 3; 
+
+14. MIN and MAX Value-->
+    1. MIN:
+    SELECT MIN(column_name)
+    FROM table_name
+    WHERE condition; 
+    
+    2. MAX:
+    SELECT MAX(column_name)
+    FROM table_name
+    WHERE condition;
+
+15. Count, Avg, Sum Value -->
+    1. COUNT:
+    SELECT COUNT(column_name)
+    FROM table_name
+    WHERE condition;
+    
+    2. AVG:
+    SELECT AVG(column_name)
+    FROM table_name
+    WHERE condition; 
+    
+    3.SUM:
+    SELECT SUM(column_name)
+    FROM table_name
+    WHERE condition; 
+
+16. Like - Find some values with a letter -->
+    1. First letter search:
+    SELECT * FROM Customers
+    WHERE CustomerName LIKE 'a%';
+    
+    2. Last letter search:
+    SELECT * FROM Customers
+    WHERE CustomerName LIKE '%a';
+    
+    3. Middle letter search:
+    SELECT * FROM Customers
+    WHERE CustomerName LIKE '%abc%';
+    
+    4. Second position search and wildcard:
+    SELECT * FROM Customers
+    WHERE CustomerName LIKE '_a%';
+    
+    5. At least 3 characters in length:
+    SELECT * FROM Customers
+    WHERE CustomerName LIKE 'a__%';
+    
+    6. start a and end o letter:
+    SELECT * FROM Customers
+    WHERE ContactName LIKE 'a%o';
+    
+    7. Not start with a:
+    SELECT * FROM Customers
+    WHERE CustomerName NOT LIKE 'a%';
+
+17. In -- Search data with IN:
+    1. Only specific searching data:
+    SELECT * FROM Customers
+    WHERE Country IN ('Germany', 'France', 'UK');
+    
+    2. Search without this data:
+    SELECT * FROM Customers
+    WHERE Country NOT IN ('Germany', 'France', 'UK');
+    
+    3. Search same values with another tables matching values:
+    SELECT * FROM Customers
+    WHERE Country IN (SELECT Country FROM Suppliers);
+
+18. Between two values data show:
+    1. 10 to 20 values:
+    SELECT * FROM Products
+    WHERE Price BETWEEN 10 AND 20;
+    
+    2. 10 to 20 values not show:
+    SELECT * FROM Products
+    WHERE Price NOT BETWEEN 10 AND 20;
+    
+    3. column1 10 to 20 values and columns2 not in this values:
+    SELECT * FROM Products
+    WHERE Price BETWEEN 10 AND 20
+    AND CategoryID NOT IN (1,2,3);
+    
+    4. Between Text Value:
+    SELECT * FROM Products
+    WHERE ProductName BETWEEN 'Carnarvon Tigers' AND 'Mozzarella di Giovanni'
+    ORDER BY ProductName;
+    
+    5. Not Between Text Value:
+    SELECT * FROM Products
+    WHERE ProductName NOT BETWEEN 'Carnarvon Tigers' AND 'Mozzarella di Giovanni'
+    ORDER BY ProductName;
+    
+    6. Between Date:
+    SELECT * FROM Orders
+    WHERE OrderDate BETWEEN '1996-07-01' AND '1996-07-31';
+
+19. Rename or Alias -->
+    1. Alias Column Syntax:
+    SELECT column_name AS alias_name
+    FROM table_name;
+    
+    2. Alias Table Syntax:
+    SELECT column_name(s)
+    FROM table_name AS alias_name;
+
+
+
+
