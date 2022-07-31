@@ -1,0 +1,110 @@
+---Advanced Topics----
+
+1. Create Table -->
+CREATE TABLE Persons (
+    ID int NOT NULL,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int,
+    PRIMARY KEY (ID),
+    UNIQUE (Age),
+    
+); 
+
+2. inner
+3.left
+4.right
+5. cross
+6. Union or join All Column Data-->
+    1. Union Specification:
+    SELECT City FROM Customers
+    UNION
+    SELECT City FROM Suppliers
+    ORDER BY City;
+
+    2. Union All Data:
+    SELECT City FROM Customers
+    UNION
+    SELECT City FROM Suppliers
+    ORDER BY City;
+
+    3. Union with Where:
+    SELECT City, Country FROM Customers
+    WHERE Country='Germany'
+    UNION
+    SELECT City, Country FROM Suppliers
+    WHERE Country='Germany'
+    ORDER BY City;
+    
+    4. Another Union:
+    SELECT 'Customer' AS Type, ContactName, City, Country
+    FROM Customers
+    UNION
+    SELECT 'Supplier', ContactName, City, Country
+    FROM Suppliers
+
+7. Group By or How many same values in one row:
+    1. Group By:
+    SELECT COUNT(CustomerID), Country
+    FROM Customers
+    GROUP BY Country;
+    
+    2. Group And Order By:
+    SELECT COUNT(CustomerID), Country
+    FROM Customers
+    GROUP BY Country
+    ORDER BY COUNT(CustomerID) DESC;
+
+    3. Group and Join:
+    SELECT Shippers.ShipperName, COUNT(Orders.OrderID) AS NumberOfOrders FROM Orders
+    LEFT JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+    GROUP BY ShipperName;
+
+8. Having Clause:
+    1. Syntax:
+    SELECT column_name(s)
+    FROM table_name
+    WHERE condition
+    GROUP BY column_name(s)
+    HAVING condition
+    ORDER BY column_name(s);
+
+    2. SELECT COUNT(CustomerID), Country
+    FROM Customers
+    GROUP BY Country
+    HAVING COUNT(CustomerID) > 5
+    ORDER BY COUNT(CustomerID) DESC;
+
+9. Exist Operator:
+    1. SELECT SupplierName
+    FROM Suppliers
+    WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.SupplierID = Suppliers.supplierID AND Price < 20);
+
+10. Any and All Operator:
+    1. Any:
+    SELECT ProductName
+    FROM Products
+    WHERE ProductID = ANY
+    (SELECT ProductID
+    FROM OrderDetails
+    WHERE Quantity > 99); 
+
+    2. All:
+    SELECT ProductName
+    FROM Products
+    WHERE ProductID = ALL
+    (SELECT ProductID
+    FROM OrderDetails
+    WHERE Quantity = 10); 
+
+11. Copy Data one Table to another Table or Insert Into Select Syntax:
+    1. INSERT INTO table2
+    SELECT * FROM table1
+    WHERE condition; 
+
+12. Case Statement:
+    1. INSERT INTO table2
+    SELECT * FROM table1
+    WHERE condition; 
+
+13. 
