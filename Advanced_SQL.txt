@@ -1,20 +1,45 @@
 ---Advanced Topics----
 
-1. Create Table -->
-CREATE TABLE Persons (
-    ID int NOT NULL,
-    LastName varchar(255) NOT NULL,
-    FirstName varchar(255),
-    Age int,
-    PRIMARY KEY (ID),
-    UNIQUE (Age),
-    
-); 
+1. Inner Join -->
+    1. Inner Join Syntax:
+    SELECT column_name(s)
+    FROM table1
+    INNER JOIN table2
+    ON table1.column_name = table2.column_name;
 
-2. inner
-3.left
-4.right
-5. cross
+    2.Example:
+    SELECT Persons.PersonID, Phone.Number 
+    FROM Persons 
+    JOIN Phone 
+    ON Persons.PersonID = Phone.phoneID;
+
+2. Left Join -->
+    1. Left Join:
+    SELECT Customers.CustomerName, Orders.OrderID
+    FROM Customers
+    LEFT JOIN Orders
+    ON Customers.CustomerID=Orders.CustomerID
+    ORDER BY Customers.CustomerName;
+
+3. Right Join --> 
+    1. Right Join:
+    SELECT Orders.OrderID, Employees.LastName, Employees.FirstName
+    FROM Orders
+    RIGHT JOIN Employees
+    ON Orders.EmployeeID = Employees.EmployeeID
+    ORDER BY Orders.OrderID;
+
+4. Cross Join -->
+    1. SELECT Customers.CustomerName, Orders.OrderID
+    FROM Customers
+    CROSS JOIN Orders;
+
+5. Self Join -->
+    1. Self Join:
+    SELECT column_name(s)
+    FROM table1 T1, table1 T2
+    WHERE condition;
+
 6. Union or join All Column Data-->
     1. Union Specification:
     SELECT City FROM Customers
