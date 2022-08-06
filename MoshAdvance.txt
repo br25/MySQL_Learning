@@ -1,0 +1,296 @@
+28. AGGREGATE FUNCTION -->
+    MAX(column)
+    MIN()
+    AVG()
+    SUM()
+    COUNT()
+
+29. GROUP BY
+
+30. HAVING CLAUSE filter Data
+
+31. ROLLUP OPERATOR or Total count -->
+    SELECT SUM(price) AS Total_Price
+    FROM user u
+    GROUP BY id WITH ROLLUP;
+
+32. MYSQL NUMERIC FUNCTION SEARCH
+
+33. MYSQL STRING FUNCTION SEARCH
+
+34. MYSQL DATE FORMANT STRING SEARCH
+
+35. IFNULL() -->
+    SELECT IFNULL(multiple_value, "not execute") AS NullorNot FROM user;
+    
+    COALESCE() FUNCTION -->
+    SELECT
+    CONCAT('fname', ' ', 'lname') AS CUSTOMER,
+    COALESCE(phone, 'unknown') AS phone
+    FROM Customers
+
+36. IF FUNCTION -->
+    SELECT
+    orderID,
+    orderDATE
+    if(
+        YEAR(orderDATE) = YEAR(NOW()),
+        'Active',
+        'Archived'
+    ) AS category
+    FROM orders;
+
+37. CASE OPERATOR -->
+    SELECT
+    orderID,
+    CASE
+        WHEN YEAR(orderDATE) = YEAR(NOW()) THEN 'active'
+        WHEN YEAR(orderDATE) = YEAR(NOW()) - 1 THEN 'active'
+        WHEN YEAR(orderDATE) < YEAR(NOW()) - 1 THEN 'active'
+        ELSE 'Future'
+    END AS category
+    FROM orders;
+
+38. CREATING VIEW
+
+39. ALTERING AND DROPING VIEW --> CREATE VIEW OR RELAPLACE VIEW
+
+40. UPDATABLE VIEW
+
+41. WITH CHECK OPTION
+
+42. CRETE STORED PROCEDURE or like function
+    DELIMITER $$
+    CREATE PROCEDURE get_clients()
+    BEGIN 
+        SELECT * FROM user;
+    END$$
+    DELIMITER;
+
+    CALL get_clients();
+
+43. DROP PROCEDURE IF EXISTS get_clients;
+
+44. PARAMETRES -->
+    DROP PROCEDURE IF EXISTS get_clients_by_state;
+    
+    DELIMITER $$
+    CREATE PROCEDURE get_clients_by_state
+    (
+        state CHAR(2)
+    )
+    BEGIN 
+        SELECT * FROM user;
+    END$$
+    DELIMITER;
+
+    CALL get_clients_by_state('CA');
+
+45. DEFAULT PARAMETRE -->
+    BEGIN
+    IF state IS NULL THEN
+        SET state = "MA";
+    END IF;
+
+    CALL(NULL)
+
+46. PARAMETRE VALIDATION -->
+    IF paument_amount <= 0 THEN
+        SIGNAL SQLSTATE '22003'
+            SET MESSAGE_TEXT = "Invalid payment amount";
+    END IF;
+
+47. OUTPUT PARAMETRE
+
+48. VARIABLE -->
+    DECLARE invoice DECIMAL(2,2) DEFAULT 0;
+
+49. FUNCTION -->
+    CREATE FUNCTION get_risk
+    (
+        client_id INT
+    )
+    RETURNS INTEGER
+    READS SQL DATA 
+    MODIFIES SQL DATA
+    BEGIN
+    RETURN 1;
+    END
+
+50. TRIGGERS -->
+    DELIMITER $$
+
+    CREATE TRIGGER payments_after_insert
+        AFTER INSERT ON payments 
+        FOR EACH ROW
+    BEGIN
+        UPDATE invoices
+        SET payment_total = payment_total + NEW.amount
+        WHERE invoice_id = NEW.invoice_id;
+    END $$
+    DELIMITER;
+
+    INSERT INTO payments
+    VALUES (DEFAULT, 5,3, "2019-01-01", 10,5)
+
+51. VIEW TRIGGERS -->
+    1. SHOW TRIGGERS
+    2. SHOW TRIGGERS LIKE 'payments%'
+
+52. DROP TRIGGER -->
+    DROP TRIGGER IF EXISTS payments_after_insert;
+
+53. USING TRIGGERS FOR AUDITING
+
+54. EVENTS -->
+    SHOW VARIABLES LIKE "events%";
+    SET GLOBAL event_scheduler = OFF
+
+    DELIMITER $$
+    CREATE EVENT yearly_delete_stale_audit_rows
+    ON SCHEDULE 
+    EVERY 1 YEAR STARTS "2019-01-01" ENDS "2029-01-01"
+    DO BEGIN
+        DELETE FROM payment_audit
+        WHERE action_date < NOW() - INTERVAL 1 YEAR;
+    END $$
+    DELIMITER;
+
+55. DROPING EVENTS AND ALTERING EVENTS -->
+    SHOW EVENTS LIKE "yearly";
+    DROP EVENT IF EXISTS yearly_delete_stale_audit_rows;
+    ALTER EVENT yearly_delete_stale_audit_rows ENABLE or DESABLE;
+
+56. CREATING TRANSACTIONS -->
+    START TRANSACTION;
+    
+    INSERT INTO orders (customer_id, order_date, status)
+    VALUES (1, '2019-01-01', 1);
+
+    INSERT INTO order_items (customer_id, order_date, status)
+    VALUES (LAST_INSERT_ID(),1, 1, 1);
+
+    COMMIT;
+
+57. CONCURRENCY AND LOCKIGN -->
+    USE sql_store;
+    START TRANSACTION;
+    UPDATE Customers
+    SET points = points + 10
+    WHERE customer_id = 1;
+    COMMIT;
+
+58. CONCURRENCY PROBLEM
+
+59. TRANSACTION ISOLATION LEVEL
+
+60. READ UNCOMMITED ISOLATION LEVEL
+
+61. READ COMMITED ISOLATION LEVEL
+
+62. REAPETABLE READ ISOLATION LEVEL
+
+63. SEREILIZED ISOLATION LEVEL
+
+64. DEADLOCKS
+
+65. DATATYPE all
+
+66. DATABASE DESIGN
+
+67. CREATE INDEX -->
+    EXPLAIN SELECT customer_id FROM customers WHERE points > 1000;
+
+    CREATE INDEX idx_points ON customers (points);
+
+68. VIEWING INDEXES -->
+    SHOW INDEXES IN customers;
+    ANALYZE TABLE customers;
+
+69. PREFIX INDEXES -->
+    CREATE INDEX idx_lastname ON customers (last_name(20));
+
+    SELECT
+        COUNT(DISTINCT LEFT(last_name, 1)),
+        COUNT(DISTINCT LEFT(last_name, 5)),
+        COUNT(DISTINCT LEFT(last_name, 10))
+    FROM customers;
+
+70. FULLTEXT INDEXES -->
+    CREATE FULLTEXT INDEX idx_title_body ON posts (title, body);
+
+    SELECT *, MATCH(title, body) AGAINST('react redux')
+    FROM posts
+    WHERE MATCH(title, body) AGAINST('"handling a form"' IN BOOLEAN MODE);
+
+71. COMPOSITE INDEXES -->
+    USE sql_store;
+    CREATE INDEX idx_state_points ON customers (state, points);
+    EXPLAIN SELECT customer_id FROM customers
+    WHERE state = 'CA' AND points > 1000;
+
+72. ORDER OF COLUMNS IN COMPOSITE INDEXES -->
+    EXPLAIN SELECT customer_id
+    FROM customers
+    USE INDEX (idx_state_lastname)
+    WHERE last_name LIKE 'A%';
+
+    DROP INDEX idx_lastname_state ON customers;
+
+    CREATE INDEX idx_state_lastname ON customers
+    (state, last_name);
+
+73. WHEN INDEXES ARE IGNORED -->
+    CREATE INDEX idx_points ON customers (points);
+
+    EXPLAIN
+    SELECT customer_id FROM customers
+    WHERE state = 'CA'
+    UNION
+    SELECT customer id FROM customers
+    WHERE points > 1000;
+
+74. USING INDEXES FOR SORTING -->
+    EXPLAIN BY points;
+    SHOW STATUS LIKE 'last_query_cost';
+
+75. COVERING INDEXES --> 
+    EXPLAIN SELECT customer_id, state FROM customers
+    ORDER BY state;
+
+    SHOW STATUS LIKE 'last_query_cost';
+
+76. CREATE USER -->
+    CREATE USER john@'%.robin.com'
+
+    CREATE USER john IDENTIFIED BY '1234';
+
+77. VIEWING USERS -->
+    SELECT * FROM mysql.user;
+
+78. DROP USER
+
+79. SET PASSWORD FOR john =  '123';
+
+80. GRANTING PRIVILEGES -->
+    -- 1: web/desktop application
+    CREATE USER moon_app IDENTIFIED BY '123';
+
+    GRANT SELECT, INSERT, UPDATE, DELETE, execute
+    ON sql_store.*
+    TO moon_app;
+
+    --2: admin
+    GRANT all
+    ON *.*
+    TO john;
+
+81. VIEWING PRIVILEGES --> 
+    SHOW GRANTS
+
+82. REVOKING PRIVILEGES -->
+    REVOKE CREATE VIEW
+    ON sql_store.*
+    FROM moon_app;
+
+83. 

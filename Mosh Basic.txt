@@ -1,0 +1,109 @@
+---Advanced Topic---
+
+1. SELECT CLAUSE -->
+New column and Add any values --> Exercise 1:
+    SELECT
+        name,
+        price,
+        (price * 1.1) AS 'new_price'  
+    FROM
+        user
+;
+
+2. WHERE CLAUSE -->
+    SELECT *
+    FROM user
+    WHERE price <= 20;
+
+3. AND OR NOT -->
+    SELECT * FROM user
+    WHERE id = 3 AND price = 40;
+
+4. IN Operator -->
+sortcut of WHERE
+    SELECT * FROM user
+    WHERE price NOT IN (20,30,40);
+
+5. BETWEEN -->
+    SELECT * FROM user
+    WHERE price BETWEEN 20 AND 30;
+
+6. Like -->
+    SELECT * FROM user
+    WHERE name LIKE '%i';
+
+7. REGEXP or Regular Expression-->
+    1. REGEXP similer to Like: (It search many character)
+    SELECT * FROM user
+    WHERE name REGEXP '[i]n';
+
+    Another REGEXP
+    1. ^ beginning Example: '^start|contain'
+    2. $ end, Example: 'character_last$|character_last$'
+    3. | logical or
+    4. [abcd]
+    5. [a-f]
+
+8. IS NULL -->
+    SELECT * FROM user
+    WHERE name IS NULL;
+
+9. ORDER BY -->
+    SELECT * FROM user
+    ORDER BY price DESC;
+
+10. LIMIT -->
+    SELECT * FROM user
+    LIMIT 1;
+
+11. INNER JOIN or JOIN -->
+    SELECT items, price FROM orders o
+    INNER JOIN user u 
+    ON o.id = u.id;
+
+12. JOINING ACCROSS DATABASE or join column in Two Database -->
+    USE TestDB;
+
+    SELECT * FROM user u
+    JOIN TestDB.Phone p 
+    ON p.phoneID = u.id;
+
+13. SELF JOIN
+
+14. JOINING MULTIPLE TABLE
+
+15. COMPOUND JOIN CONDITION
+
+16. IMPLICIT JOIN SYNTAX or joining syntax have WHERE drop ON
+
+17. OUTER LEFT & RIGHT JOIN
+
+18. OUTER JOIN MULTIPLE TABLE
+
+19. USING CLAUSE --> 
+    -- ON order.user_id = customer.user_id
+    USING (user_id) sortcut of commentout line
+
+20. NATURAL JOIN
+
+21. CROSS JOIN
+
+22. UNION
+
+23. INSERTING HIERARCHICAL or Insert Data Updating all TABLE : LAST_INSERT_ID()
+
+24. INSERT MULTIPLE ROWS -->
+    UPDATE user
+    SET name = "tini", price = 66
+    WHERE id = 22;
+
+25. SUBQUERYS IN UPDATE -->
+    UPDATE user
+    SET id = 4
+    WHERE id = (
+        SELECT * FROM user
+        WHERE name = "das");
+
+26. DELETE
+
+27. RESTORING DATABASE
